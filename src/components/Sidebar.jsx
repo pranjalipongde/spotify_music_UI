@@ -4,12 +4,12 @@ import Logo from "../assets/Logo.png";
 
 const Sidebar = () => {
   return (
-    <div className="bg-gray-800 h-screen w-1/6 flex flex-col justify-between p-4">
+    <div className="bg-gray-800 h-screen w-full md:w-60 flex flex-row lg:flex-col justify-between p-4">
       <div>
-        <img src={Logo} alt="Logo" className="h-10 w-auto mb-6" />
+        <img src={Logo} alt="Logo" className="h-10 w-auto " />
       </div>
 
-      <div className="flex itmes-center">
+      <div className="flex itmes-center mt-auto">
         <img
           src={Profile}
           alt="Profile"
