@@ -2,13 +2,176 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ./src/customStyles.css */
 .no-scrollbar::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: #000;
+  color: white;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: all 0.5s ease;
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #000;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar img {
+  width: 100px;
+}
+
+.sidebar .profile {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.songs-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.main-content ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.main-content li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background: #333;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.5s ease;
+}
+
+.main-content li:hover {
+  background: #555;
+}
+
+.main-content img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.now-playing {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+.now-playing img {
+  width: 300px;
+  height: 300px;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.now-playing h2 {
+  margin: 0.5rem 0;
+}
+
+.now-playing .controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.now-playing .progress {
+  width: 100%;
+  height: 5px;
+  background: #555;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.now-playing .progress div {
+  height: 100%;
+  background: white;
+  transition: width 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 10;
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 1rem;
+  }
+
+  .now-playing {
+    padding: 1rem;
+  }
+
+  .app-container {
+    flex-direction: column;
+  }
 }

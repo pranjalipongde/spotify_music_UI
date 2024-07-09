@@ -1,14 +1,27 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import Searchbar from "./Searchbar";
 
 const MainContent = ({ songs, onSelectTrack }) => {
   const [view, setView] = useState("For You");
+  const [searchItem, setSearchItem] = useState("");
 
-  const filteredSongs =
-    view === "For You" ? songs : songs.filter((song) => song.top_track);
+  const handleSearchChange = (e) => {
+    setSearchItem(e.target.value);
+  };
+
+  const filteredSongs = songs
+    .filter((song) => {
+      return view === "For You" || song.top_track;
+    })
+    .filter((song) => {
+      return (
+        song.name.toLowerCase().includes(searchItem.toLowerCase()) ||
+        song.artist.toLowerCase().includes(searchItem.toLowerCase())
+      );
+    });
 
   return (
-    <div className="bg-gray-900 flex-1 p-6 flex flex-col">
+    <div className="flex-1 px-8 py-4 flex flex-col overflow-hidden">
       <div className="flex items-center mb-4 space-x-6">
         <button
           className={` text-2xl font-bold ${
@@ -29,22 +42,15 @@ const MainContent = ({ songs, onSelectTrack }) => {
         </butotn>
       </div>
 
-      <div className="relative mb-4">
-        <input
-          type="text"
-          placeholder="Search Song, Artist"
-          className="w-full p-2 mb-4 bg-gray-800 text-white rounded-lg pr-10"
-        />
-        <FaSearch className="absolute right-3 top-5 transform -translate-y-1/2 text-white" />
-      </div>
+      <Searchbar searchItem={searchItem} onSearchChange={handleSearchChange} />
 
-      <div className="flex-1 overflow-y-auto no-scrollbar">
+      <div className="songs-list flex-1 overflow-y-auto no-scrollbar transition-all duration-500">
         <ul>
           {filteredSongs.map((song) => (
             <li
               key={song.id}
               onClick={() => onSelectTrack(song)}
-              className="flex justify-between items-center p-2 mb-2 bg-gray-800 text-white rounded-lg cursor-pointer"
+              className="flex justify-between items-center p-2 mb-2 bg-gray-800 text-white rounded-lg cursor-pointer hover:bg-gray-600 active:bg-gray-600 transition-all duration-500"
             >
               <img
                 src={`https://cms.samespace.com/assets/${song.cover}`}

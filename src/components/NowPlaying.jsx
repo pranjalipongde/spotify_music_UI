@@ -1,41 +1,119 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import { IoPlayBack } from "react-icons/io5";
 import { IoPlayForward } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa6";
+import { FaPause } from "react-icons/fa";
 
-const NowPlaying = () => {
+const NowPlaying = ({
+  currentTrack,
+  isPlaying,
+  onPlayPause,
+  onNext,
+  onPrevious,
+  backgroundColor,
+}) => {
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying, currentTrack]);
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      const progress =
+        (audioRef.current.currentTime / audioRef.current.duration) * 100;
+      setProgress(progress);
+    }
+  };
+
+  const handleSeek = (e) => {
+    if (audioRef.current) {
+      const seekTime = (e.target.value / 100) * audioRef.current.duration;
+      audioRef.current.currentTime = seekTime;
+    }
+  };
+
   return (
-    <div className="bg-gray-800 p-6 flex-1">
-      <h2 className="text-white text-2xl mb-4">Title</h2>
-      <p className="text-white text-lg mb-4">Artist</p>
-      <img src="" alt="title" className="w-full h-64 object-cover mb-4" />
+    <div className="now-playing p-6 flex-1 flex flex-col items-center justify-center md:items-start md:justify-start transition-all duration-500">
+      {currentTrack ? (
+        <>
+          <div className="flex flex-col mb-4">
+            <div className="flex flex-col justify-start mr-4">
+              <h2 className="text-white text-3xl font-bold mb-2">
+                {currentTrack.name}
+              </h2>
+              <p className="text-gray-500 text-md mb-4">
+                {currentTrack.artist}
+              </p>
+            </div>
 
-      <div className="bg-gray-700 rounded-lg overflow-hidden">
-        <div className="bg-white h-2" style={{ width: "50%" }}></div>
-      </div>
+            <div class=" flex justify-center items-center mb-2 ">
+              <img
+                src={`https://cms.samespace.com/assets/${currentTrack.cover}`}
+                alt={currentTrack.name}
+                className=" h-[360px] w-[340px] object-cover rounded-xl "
+              />
+            </div>
+          </div>
 
-      <div className="flex justify-between items-center mt-4">
-        <button className="text-white p-2 rounded-full bg-gray-600">
-          <IoIosMore />
-        </button>
-        <div className="flex justify-between">
-          <button className="text-white px-4">
-            <IoPlayBack />
-          </button>
-          <button className="text-black p-2 rounded-full bg-white">
-            <FaPlay />
-          </button>
-          <button className="text-white px-4">
-            <IoPlayForward />
-          </button>
-        </div>
+          <div className="bg-gray-500 rounded-lg overflow-hidden relative h-1 mb-4 w-[340px]">
+            <div
+              className="bg-white h-full absolute top-0 left-0 transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            ></div>
+            <input
+              type="range"
+              value={progress}
+              onChange={handleSeek}
+              className="w-full opacity-1 text-white"
+            />
+          </div>
 
-        <button className="text-white p-2 rounded-full bg-gray-600">
-          <HiOutlineSpeakerWave />
-        </button>
-      </div>
+          <div className="flex justify-between items-center w-[340px] ">
+            <button className="text-white p-2 rounded-full bg-gray-600">
+              <IoIosMore />
+            </button>
+
+            <div className="flex justify-between">
+              <button className="text-white px-4" onClick={onPrevious}>
+                <IoPlayBack />
+              </button>
+
+              <button
+                className="text-black p-2 rounded-full bg-white"
+                onClick={onPlayPause}
+              >
+                {isPlaying ? <FaPause /> : <FaPlay />}
+              </button>
+
+              <button className="text-white px-4" onClick={onNext}>
+                <IoPlayForward />
+              </button>
+            </div>
+
+            <button className="text-white p-2 rounded-full bg-gray-600">
+              <HiOutlineSpeakerWave />
+            </button>
+          </div>
+
+          <audio
+            ref={audioRef}
+            src={currentTrack.url}
+            onTimeUpdate={handleTimeUpdate}
+          />
+        </>
+      ) : (
+        <p className="text-white">Select a song to play</p>
+      )}
     </div>
   );
 };
