@@ -12,7 +12,6 @@ const NowPlaying = ({
   onPlayPause,
   onNext,
   onPrevious,
-  backgroundColor,
 }) => {
   const [progress, setProgress] = useState(0);
   const audioRef = useRef(null);
@@ -43,11 +42,15 @@ const NowPlaying = ({
   };
 
   return (
-    <div className="now-playing p-6 flex-1 flex flex-col items-center justify-center md:items-start md:justify-start transition-all duration-500">
+    <div
+      className={`now-playing p-6 flex flex-col items-center justify-center ${
+        currentTrack ? "has-track" : ""
+      }`}
+    >
       {currentTrack ? (
         <>
-          <div className="flex flex-col mb-4">
-            <div className="flex flex-col justify-start mr-4">
+          <div className="flex flex-row items-center lg:flex-col mb-4 lg:mb-0 lg:mr-4">
+            <div className="flex flex-col mr-4 lg:justify-start">
               <h2 className="text-white text-3xl font-bold mb-2">
                 {currentTrack.name}
               </h2>
@@ -56,16 +59,16 @@ const NowPlaying = ({
               </p>
             </div>
 
-            <div class=" flex justify-center items-center mb-2 ">
+            <div class="hidden lg:block flex-shrink-0 lg:ml-4">
               <img
                 src={`https://cms.samespace.com/assets/${currentTrack.cover}`}
                 alt={currentTrack.name}
-                className=" h-[360px] w-[340px] object-cover rounded-xl "
+                className=" h-[370px] w-[340px] object-cover rounded-xl "
               />
             </div>
           </div>
 
-          <div className="bg-gray-500 rounded-lg overflow-hidden relative h-1 mb-4 w-[340px]">
+          <div className="bg-gray-500 rounded-lg overflow-hidden relative h-1 mb-4 w-[330px]">
             <div
               className="bg-white h-full absolute top-0 left-0 transition-all duration-500"
               style={{ width: `${progress}%` }}

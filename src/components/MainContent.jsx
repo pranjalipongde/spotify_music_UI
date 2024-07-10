@@ -21,7 +21,7 @@ const MainContent = ({ songs, onSelectTrack }) => {
     });
 
   return (
-    <div className="flex-1 px-8 py-4 flex flex-col overflow-hidden">
+    <div className="flex-1 px-8 py-4 flex flex-col overflow-hidden md:h-screen">
       <div className="flex items-center mb-4 space-x-6">
         <button
           className={` text-2xl font-bold ${
